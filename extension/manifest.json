@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "name": "Minesweeper Replay Analyzer",
+  "version": "1.0",
+  "description": "Analyze Minesweeper replays with probability calculations and move suggestions",
+  
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  
+  "host_permissions": [
+    "*://minesweeper.online/*"
+  ],
+  
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["*://minesweeper.online/*"],
+      "js": ["src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["*://minesweeper.online/*"],
+      "js": [
+        "solver/solver_bridge.js",
+        "solver/PrimeSieve.js",
+        "solver/Binomial.js",
+        "solver/Tile.js",
+        "solver/Board.js",
+        "solver/SolutionCounter.js",
+        "solver/FiftyFiftyHelper.js",
+        "solver/EfficiencyHelper.js",
+        "solver/Brute_force.js",
+        "solver/solver_probability_engine.js",
+        "solver/BruteForceAnalysis.js",
+        "solver/solver_main.js",
+        "solver/extension_adapter.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Minesweeper Analyzer",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/solver/*",
+        "solver/*"
+      ],
+      "matches": ["*://minesweeper.online/*"]
+    }
+  ]
+} 

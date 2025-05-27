@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minesweeper Analyzer</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .status {
+      background: #f5f5f5;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    
+    .status-item {
+      margin-bottom: 8px;
+    }
+    
+    .status-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    button:hover {
+      background: #45a049;
+    }
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .settings {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .setting-item label {
+      font-size: 13px;
+    }
+    
+    input[type="checkbox"] {
+      margin: 0;
+    }
+    
+    .analysis-result {
+      margin-top: 16px;
+      padding: 12px;
+      background: #e8f5e8;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    
+    .error {
+      background: #ffe8e8;
+      color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <h1>🎯 Minesweeper Analyzer</h1>
+      <div class="version">v1.0.0</div>
+    </header>
+
+    <main class="popup-content">
+      <!-- Status Section -->
+      <section class="status-section">
+        <div class="status-item">
+          <span class="status-label">Status:</span>
+          <span id="connection-status" class="status-value">Checking...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Mode:</span>
+          <span id="game-mode" class="status-value">Unknown</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Board:</span>
+          <span id="board-status" class="status-value">Not detected</span>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="actions-section">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+          <button id="analyze-btn" class="action-btn primary" disabled>
+            <span class="btn-icon">🔍</span>
+            Analyze Current
+          </button>
+          <button id="toggle-probabilities-btn" class="action-btn">
+            <span class="btn-icon">📊</span>
+            Show Probabilities
+          </button>
+          <button id="toggle-overlay-btn" class="action-btn">
+            <span class="btn-icon">👁️</span>
+            Toggle Overlay
+          </button>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section class="settings-section">
+        <h3>Settings</h3>
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="auto-analyze" class="setting-checkbox">
+            <span class="checkmark"></span>
+            Auto-analyze replays
+          </label>
+        </div>
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="show-probabilities" class="setting-checkbox">
+            <span class="checkmark"></span>
+            Show probability overlays
+          </label>
+        </div>
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="highlight-moves" class="setting-checkbox">
+            <span class="checkmark"></span>
+            Highlight best moves
+          </label>
+        </div>
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="analysis-enabled" class="setting-checkbox">
+            <span class="checkmark"></span>
+            Enable analysis
+          </label>
+        </div>
+      </section>
+
+      <!-- Analysis Results -->
+      <section class="results-section" id="results-section" style="display: none;">
+        <h3>Analysis Results</h3>
+        <div class="result-item">
+          <span class="result-label">Safe moves:</span>
+          <span id="safe-moves-count" class="result-value">0</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Best guess:</span>
+          <span id="best-guess" class="result-value">None</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Win probability:</span>
+          <span id="win-probability" class="result-value">Unknown</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="popup-footer">
+      <div class="footer-links">
+        <a href="#" id="help-link">Help</a>
+        <a href="#" id="feedback-link">Feedback</a>
+        <a href="https://minesweeper.online" target="_blank">Play Game</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mine Parsing Test</title>
+</head>
+<body>
+    <h1>Mine Parsing Test</h1>
+    
+    <!-- Simulate minesweeper.online cell structure -->
+    <div id="AreaBlock">
+        <!-- Normal number cells -->
+        <div id="cell_0_0" class="cell hd_opened hd_type1" data-x="0" data-y="0"></div>
+        <div id="cell_1_0" class="cell hd_opened hd_type2" data-x="1" data-y="0"></div>
+        <div id="cell_2_0" class="cell hd_opened hd_type8" data-x="2" data-y="0"></div>
+        
+        <!-- Mine cells in failed game -->
+        <div id="cell_0_1" class="cell hd_opened hd_type10" data-x="0" data-y="1"></div>
+        <div id="cell_1_1" class="cell hd_opened hd_type11" data-x="1" data-y="1"></div>
+        
+        <!-- Hidden cells -->
+        <div id="cell_2_1" class="cell hd_closed" data-x="2" data-y="1"></div>
+    </div>
+
+    <script>
+        // Test our parsing logic
+        function testCellParsing() {
+            console.log('Testing cell parsing...');
+            
+            const testCases = [
+                { id: 'cell_0_0', expectedValue: 1, expectedMine: false, description: 'Normal number cell (1)' },
+                { id: 'cell_1_0', expectedValue: 2, expectedMine: false, description: 'Normal number cell (2)' },
+                { id: 'cell_2_0', expectedValue: 8, expectedMine: false, description: 'Normal number cell (8)' },
+                { id: 'cell_0_1', expectedValue: 0, expectedMine: true, description: 'Mine cell (type 10)' },
+                { id: 'cell_1_1', expectedValue: 0, expectedMine: true, description: 'Exploded mine (type 11)' },
+                { id: 'cell_2_1', expectedValue: 0, expectedMine: false, description: 'Hidden cell' }
+            ];
+            
+            testCases.forEach(testCase => {
+                const element = document.getElementById(testCase.id);
+                const result = parseCellState(element, parseInt(testCase.id.split('_')[1]), parseInt(testCase.id.split('_')[2]));
+                
+                console.log(`Testing ${testCase.description}:`);
+                console.log(`  Expected: value=${testCase.expectedValue}, isMine=${testCase.expectedMine}`);
+                console.log(`  Actual: value=${result.value}, isMine=${result.isMine}`);
+                console.log(`  ✅ ${result.value === testCase.expectedValue && result.isMine === testCase.expectedMine ? 'PASS' : 'FAIL'}`);
+                console.log('');
+            });
+        }
+        
+        // Copy of the parsing function from content.js
+        function parseCellState(cellElement, x, y) {
+            const classes = cellElement.className;
+            
+            let state = 'unknown';
+            let value = 0;
+            let isFlagged = false;
+            let isMine = false;
+            
+            if (classes.includes('hd_closed')) {
+                state = 'hidden';
+            } else if (classes.includes('hd_opened')) {
+                state = 'revealed';
+                
+                // Extract number from hd_typeX class (handles single and double digits)
+                const typeMatch = classes.match(/hd_type(\d+)/);
+                if (typeMatch) {
+                    const typeValue = parseInt(typeMatch[1]);
+                    if (typeValue <= 8) {
+                        // Normal number cells (0-8)
+                        value = typeValue;
+                    } else if (typeValue === 10) {
+                        // Mine in failed game
+                        isMine = true;
+                        value = 0; // Treat as empty cell for analysis purposes
+                    } else if (typeValue === 11) {
+                        // Exploded mine
+                        isMine = true;
+                        value = 0; // Treat as empty cell for analysis purposes
+                    }
+                }
+            }
+            
+            // Check for flag
+            if (classes.includes('hd_flagged') || classes.includes('flagged')) {
+                isFlagged = true;
+                state = 'flagged';
+            }
+            
+            // Check for mine (in completed games or replays)
+            if (classes.includes('hd_mine') || classes.includes('mine')) {
+                isMine = true;
+            }
+            
+            return {
+                x: x,
+                y: y,
+                state: state,
+                value: value,
+                isFlagged: isFlagged,
+                isMine: isMine,
+                element: cellElement
+            };
+        }
+        
+        // Run test when page loads
+        window.onload = testCellParsing;
+    </script>
+</body>
+</html> 

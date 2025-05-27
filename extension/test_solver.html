@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solver Test</title>
+</head>
+<body>
+    <h1>Solver Test</h1>
+    <div id="output"></div>
+    
+    <script src="solver/PrimeSieve.js"></script>
+    <script src="solver/Binomial.js"></script>
+    <script src="solver/Tile.js"></script>
+    <script src="solver/Board.js"></script>
+    <script src="solver/SolutionCounter.js"></script>
+    <script src="solver/solver_probability_engine.js"></script>
+    <script src="solver/solver_main.js"></script>
+    <script src="solver/extension_adapter.js"></script>
+    
+    <script>
+        console.log('Testing solver components...');
+        console.log('Available globals:', {
+            PrimeSieve: typeof PrimeSieve,
+            Binomial: typeof Binomial,
+            Tile: typeof Tile,
+            Board: typeof Board,
+            SolutionCounter: typeof SolutionCounter,
+            solver: typeof solver,
+            ExtensionSolverAdapter: typeof ExtensionSolverAdapter
+        });
+        
+        // Try to create instances
+        try {
+            const tile = new Tile(0, 0, 0);
+            console.log('Tile created successfully:', tile);
+            
+            const board = new Board(null, 9, 9, 10, null, null);
+            console.log('Board created successfully:', board);
+            
+            const adapter = new ExtensionSolverAdapter();
+            console.log('ExtensionSolverAdapter created successfully:', adapter);
+            
+            document.getElementById('output').innerHTML = 'All components loaded successfully!';
+        } catch (error) {
+            console.error('Error creating components:', error);
+            document.getElementById('output').innerHTML = 'Error: ' + error.message;
+        }
+    </script>
+</body>
+</html> 

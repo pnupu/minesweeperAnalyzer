@@ -1,0 +1,24 @@
+{
+  "name": "jsminesweeper",
+  "version": "1.0.0",
+  "description": "JavaScript Minesweeper solver and game",
+  "main": "startServer.js",
+  "scripts": {
+    "start": "node startServer.js",
+    "dev": "node startServer.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [
+    "minesweeper",
+    "solver",
+    "game",
+    "javascript"
+  ],
+  "author": "David Hill",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
